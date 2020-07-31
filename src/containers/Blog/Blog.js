@@ -1,3 +1,5 @@
+/* eslint-disable class-methods-use-this */
+
 import React, { Component } from 'react';
 import axios from 'axios';
 
@@ -11,6 +13,7 @@ class Blog extends Component {
     super(props);
     this.state = {
       posts: [],
+      selectedPostId: null,
     };
   }
 
@@ -18,26 +21,48 @@ class Blog extends Component {
     axios
       .get('https://jsonplaceholder.typicode.com/posts')
       .then((response) => {
-        this.setState({ posts: response.data });
+        const posts = response.data.slice(0, 4);
+        const updatedPosts = posts.map((post) => {
+          return {
+            ...post,
+            author: 'Amit',
+          };
+        });
+        this.setState({ posts: updatedPosts });
       })
       .catch((err) => {
         throw new Error(err);
       });
   }
 
-  render() {
-    const { posts } = this.state;
+  postClickedHandler = (postId) => {
+    this.setState({ selectedPostId: postId });
+  }
 
-    //  turns the posts arr to a components array
-    const postsCompnentsArr = posts.map((post) => {
-      return <Post key={post.id} title={post.title} />;
+  /*
+  //  turns the posts arr to a components array
+  */
+  changeToPostsComp(posts) {
+    return posts.map((post) => {
+      return (
+        <Post
+          key={post.id}
+          title={post.title}
+          author={post.author}
+          clicked={() => this.postClickedHandler(post.id)}/>
+      );
     });
+  }
+
+  render() {
+    const { posts, selectedPostId } = this.state;
+    const postsAsComponents = this.changeToPostsComp(posts);
 
     return (
       <div>
-        <section className={classes.Posts}>{postsCompnentsArr}</section>
+        <section className={classes.Posts}>{postsAsComponents}</section>
         <section>
-          <FullPost />
+          <FullPost id={selectedPostId} />
         </section>
         <section>
           <NewPost />
