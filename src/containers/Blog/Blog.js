@@ -31,13 +31,24 @@ class Blog extends Component {
         this.setState({ posts: updatedPosts });
       })
       .catch((err) => {
-        throw new Error(err);
+        // throw new Error(err);
+        //console.log(err);
       });
   }
 
   postClickedHandler = (postId) => {
     this.setState({ selectedPostId: postId });
-  }
+  };
+
+  removePostHandler = (selectedPostId) => {
+    axios
+      .delete(`https://jsonplaceholder.typicode.com/posts/${selectedPostId}`)
+      .then((res) => {console.log(`post ${selectedPostId} was deleted`)})
+      .catch((err) => {
+        throw new Error(err);
+      });
+    // console.log(`removing post with id: ${selectedPostId}`);
+  };
 
   /*
   //  turns the posts arr to a components array
@@ -55,17 +66,6 @@ class Blog extends Component {
     });
   }
 
-  removePostHandler = (selectedPostId) => {
-    axios.delete(`https://jsonplaceholder.typicode.com/posts/${selectedPostId}`)
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        throw new Error(err);
-      });
-    // console.log(`removing post with id: ${selectedPostId}`);
-  }
-
   render() {
     const { posts, selectedPostId } = this.state;
     const postsAsComponents = this.changeToPostsComp(posts);
@@ -76,7 +76,8 @@ class Blog extends Component {
         <section>
           <FullPost
             id={selectedPostId}
-            removePost={() => this.removePostHandler(selectedPostId)}/>
+            removePost={() => this.removePostHandler(selectedPostId)}
+          />
         </section>
         <section>
           <NewPost />
