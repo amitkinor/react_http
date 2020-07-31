@@ -49,9 +49,21 @@ class Blog extends Component {
           key={post.id}
           title={post.title}
           author={post.author}
-          clicked={() => this.postClickedHandler(post.id)}/>
+          clicked={() => this.postClickedHandler(post.id)}
+        />
       );
     });
+  }
+
+  removePostHandler = (selectedPostId) => {
+    axios.delete(`https://jsonplaceholder.typicode.com/posts/${selectedPostId}`)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        throw new Error(err);
+      });
+    // console.log(`removing post with id: ${selectedPostId}`);
   }
 
   render() {
@@ -62,7 +74,9 @@ class Blog extends Component {
       <div>
         <section className={classes.Posts}>{postsAsComponents}</section>
         <section>
-          <FullPost id={selectedPostId} />
+          <FullPost
+            id={selectedPostId}
+            removePost={() => this.removePostHandler(selectedPostId)}/>
         </section>
         <section>
           <NewPost />

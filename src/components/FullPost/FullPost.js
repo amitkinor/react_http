@@ -6,17 +6,16 @@ import classes from './FullPost.module.css';
 
 class FullPost extends Component {
   state = {
-      presentedPost: null,
-    };
-  
+    presentedPost: null,
+  };
+
   componentDidUpdate() {
-    if (this.props.id) {
-      if (!this.state.presentedPost ||
-        (this.state.presentedPost &&
-        this.state.presentedPost.id !== this.props.id)
-      ) {
+    const { id } = this.props;
+    const { presentedPost } = this.state;
+    if (id) {
+      if (!presentedPost || (presentedPost && presentedPost.id !== id)) {
         axios
-          .get(`https://jsonplaceholder.typicode.com/posts/${this.props.id}`)
+          .get(`https://jsonplaceholder.typicode.com/posts/${id}`)
           .then((response) => {
             this.setState({ presentedPost: response.data });
           })
@@ -28,17 +27,24 @@ class FullPost extends Component {
   }
 
   render() {
+    const { id, removePost } = this.props;
+    const { presentedPost } = this.state;
+
     let post = <p style={{ textAlign: 'center' }}>Please select a Post!</p>;
-    if (this.props.id) {
-      let post = <p style={{ textAlign: 'center' }}>Loading!</p>;
+    if (id) {
+      post = <p style={{ textAlign: 'center' }}>Loading!</p>;
     }
-    if (this.state.presentedPost) {
+    if (presentedPost) {
       post = (
         <div className={classes.FullPost}>
-          <h1>{this.state.presentedPost.title}</h1>
-          <p>Content</p>
+          <h1>{presentedPost.title}</h1>
+          <p>{presentedPost.body}</p>
           <div className={classes.Edit}>
-            <button type="button" className={classes.Delete}>
+            <button
+              type="button"
+              className={classes.Delete}
+              onClick={removePost}
+            >
               Delete
             </button>
           </div>
@@ -50,6 +56,8 @@ class FullPost extends Component {
 }
 FullPost.propType = {
   id: PropTypes.object,
+  removePost: PropTypes.func.isRequired,
+  presentedPost: PropTypes.object.isRequired,
 };
 
 export default FullPost;

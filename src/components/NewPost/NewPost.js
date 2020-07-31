@@ -1,4 +1,6 @@
+
 import React, { Component } from 'react';
+import axios from 'axios';
 
 import classes from './NewPost.module.css';
 
@@ -9,12 +11,27 @@ class NewPost extends Component {
     author: 'Max',
   };
 
+
+  postDataHandler = () => {
+    const { title, content, author } = this.state;
+    const data = {
+      title,
+      content,
+      author,
+    };
+    axios
+      .post('https://jsonplaceholder.typicode.com/posts', data)
+      .then((res) => {
+        console.log(res.data);
+      });
+  }
+
   render() {
-      const { title, content, author } = this.state;
+    const { title, content, author } = this.state;
     return (
       <div className={classes.NewPost}>
         <h1>Add a Post</h1>
-        <label>Title</label>
+        <label>{title}</label>
         <input
           type="text"
           value={title}
@@ -34,7 +51,9 @@ class NewPost extends Component {
           <option value="Max">Max</option>
           <option value="Manu">Manu</option>
         </select>
-        <button type="button">Add Post</button>
+        <button type="button" onClick={this.postDataHandler}>
+            Add Post
+        </button>
       </div>
     );
   }

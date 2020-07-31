@@ -23,6 +23,16 @@ module.exports = {
     'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx'] }],
     'react/forbid-prop-types': [0, { forbid: ['any'] }],
     'react/prop-types': 0,
+    'jsx-a11y/label-has-associated-control': [
+      "error",
+      {
+        "labelComponents": [],
+        "labelAttributes": [],
+        "controlComponents": [],
+        "assert": "either",
+        "depth": 25
+      }
+    ],
   },
   
   
