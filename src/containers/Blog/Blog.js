@@ -31,8 +31,7 @@ class Blog extends Component {
         this.setState({ posts: updatedPosts });
       })
       .catch((err) => {
-        // throw new Error(err);
-        //console.log(err);
+        throw new Error(err);
       });
   }
 
@@ -43,7 +42,9 @@ class Blog extends Component {
   removePostHandler = (selectedPostId) => {
     axios
       .delete(`/posts/${selectedPostId}`)
-      .then((res) => {console.log(`post ${selectedPostId} was deleted`)})
+      .then((res) => {
+        console.log(`post ${selectedPostId} was deleted`);
+      })
       .catch((err) => {
         throw new Error(err);
       });
