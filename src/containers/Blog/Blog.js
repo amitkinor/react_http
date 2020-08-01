@@ -43,7 +43,8 @@ class Blog extends Component {
     axios
       .delete(`/posts/${selectedPostId}`)
       .then((res) => {
-        console.log(`post ${selectedPostId} was deleted`);
+        // eslint-disable-next-line no-console
+        console.log(`post ${selectedPostId} was deleted. response: ${res}`);
       })
       .catch((err) => {
         throw new Error(err);
